@@ -3,7 +3,10 @@ import uuid
 from typing import Optional
 
 from fastapi import HTTPException
-from pydantic import BaseModel, EmailStr, field_validator, constr
+from pydantic import BaseModel
+from pydantic import constr
+from pydantic import EmailStr
+from pydantic import validator
 
 #########################
 # BLOCK WITH API MODELS #
@@ -62,7 +65,7 @@ class UpdateUserRequest(BaseModel):
     surname: Optional[constr(min_length=1)]
     email: Optional[EmailStr]
 
-    @field_validator("name")
+    @validator("name")
     def validate_name(cls, value):
         if not LETTER_MATCH_PATTERN.match(value):
             raise HTTPException(
@@ -70,7 +73,7 @@ class UpdateUserRequest(BaseModel):
             )
         return value
 
-    @field_validator("surname")
+    @validator("surname")
     def validate_surname(cls, value):
         if not LETTER_MATCH_PATTERN.match(value):
             raise HTTPException(
