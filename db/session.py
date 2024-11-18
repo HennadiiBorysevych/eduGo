@@ -10,13 +10,14 @@ import settings
 ##############################################
 
 # create async engine for interaction with database
-engine = create_async_engine(settings.REAL_DATABASE_URL, future=True, echo=True)
+engine = create_async_engine(settings.REAL_DATABASE_URL, future=True, echo=True,
+                             execution_options={"isolation_level": "AUTOCOMMIT"})
 
 # create session for the interaction with database
 async_session = sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
 
 
-async def get_db() -> Generator:
+async def get_db() -> Generator: # type: ignore
     """Dependency for getting async session"""
     try:
         session: AsyncSession = async_session()
